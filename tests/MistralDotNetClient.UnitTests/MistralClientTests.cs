@@ -1,8 +1,8 @@
 using FluentAssertions;
-using FluentAssertions.LanguageExt;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure;
+using MistralDotNetClient.UnitTests.Common;
 
 namespace MistralDotNetClient.UnitTests;
 
@@ -15,7 +15,7 @@ public class MistralClientTests
     {
         MistralClient.Build(API_KEY)
             .GetModels()
-            .Should().BeRight(c => c.Data.Should().HaveCountGreaterThan(0));
+            .Should().BeRightWithLog(c => c.Data.Should().HaveCountGreaterThan(0));
     }
 
     [Fact]
@@ -25,7 +25,8 @@ public class MistralClientTests
         
         MistralClient.Build(API_KEY)
             .CreateChatCompletion(chat)
-            .Should().BeRight(c => c.Choices.Should().HaveCountGreaterThan(0));
+            .Should()
+            .BeRightWithLog(c => c.Choices.Should().HaveCountGreaterThan(0));
     }
     
     [Fact]
@@ -35,7 +36,9 @@ public class MistralClientTests
         
         MistralClient.Build(API_KEY)
             .CreateEmbedding(embedding)
-            .Should().BeRight(c => c.Data.Should().HaveCountGreaterThan(0));
+            .Should().BeRightWithLog(c => c.Data.Should().HaveCountGreaterThan(0));
     }
 }
+
+
 

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure;
 
-public class ApiResponseError
+public class ApiResponseError : IResponse
 {
     [JsonPropertyName("code")] public string Code { get; set; }
     [JsonPropertyName("message")] public string Message { get; set; }

@@ -38,7 +38,8 @@ public class MistralClient
         return BuildModelHttpRequest()
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
-            .Bind(ParseResponse<ModelResponse>);
+            .Do(Console.WriteLine)
+            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<ModelResponse>(r) : ParseError<ModelResponse>(r));
     }
     
     public Either<InternalError, ChatCompletionResponse> CreateChatCompletion(Either<InternalError, ChatCompletion> chatCompletion)
@@ -48,7 +49,8 @@ public class MistralClient
             .Map(HttpRequestConversion)
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
-            .Bind(ParseResponse<ChatCompletionResponse>);
+            .Do(Console.WriteLine)
+            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<ChatCompletionResponse>(r) : ParseError<ChatCompletionResponse>(r));
     }
     
     public Either<InternalError, EmbeddingResponse> CreateEmbedding(Either<InternalError, Embedding> embedding)
@@ -58,7 +60,8 @@ public class MistralClient
             .Map(HttpRequestConversion)
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
-            .Bind(ParseResponse<EmbeddingResponse>);
+            .Do(Console.WriteLine)
+            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<EmbeddingResponse>(r) : ParseError<EmbeddingResponse>(r));
 
     }
     
@@ -91,21 +94,21 @@ public class MistralClient
     
     private static Either<InternalError, T> ParseResponse<T>(ResponseData response) where T : IResponse
     {
-        if (response.IsSuccessStatusCode)
+        try
         {
-            try
-            {
-                var successResponse = JsonSerializer.Deserialize<T>(response.Content);
-                if (successResponse is null)
-                    return new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(T)}");
-                return successResponse;
-            } 
-            catch (Exception)
-            {
+            var successResponse = JsonSerializer.Deserialize<T>(response.Content);
+            if (successResponse is null)
                 return new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(T)}");
-            }
+            return successResponse;
+        } 
+        catch (Exception)
+        {
+            return new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(T)}");
         }
-
+    }
+    
+    private static Either<InternalError, T> ParseError<T>(ResponseData response) where T : IResponse
+    {
         try
         {
             var errorResponse = JsonSerializer.Deserialize<ApiResponseError>(response.Content);
