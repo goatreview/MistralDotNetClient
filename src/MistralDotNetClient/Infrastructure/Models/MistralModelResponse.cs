@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.Models;
 
-public class ModelResponse : IResponse
+public class MistralModelResponse : IMistralResponse
 {
     [JsonPropertyName("object")] public string Object { get; set; }
-    [JsonPropertyName("data")] public Model[] Data { get; set; }
+    [JsonPropertyName("data")] public MistralModel[] Data { get; set; }
 }

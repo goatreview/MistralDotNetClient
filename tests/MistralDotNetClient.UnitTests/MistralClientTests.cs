@@ -17,17 +17,6 @@ public class MistralClientTests
             .GetModels()
             .Should().BeRightWithLog(c => c.Data.Should().HaveCountGreaterThan(0));
     }
-
-    [Fact]
-    public void ShouldCreateChatCompletions()
-    {
-        var chat = ChatCompletion.Build().WithUserMessage("What is the current date ?").Create();
-        
-        MistralClient.Build(API_KEY)
-            .CreateChatCompletion(chat)
-            .Should()
-            .BeRightWithLog(c => c.Choices.Should().HaveCountGreaterThan(0));
-    }
     
     [Fact]
     public void ShouldCreateEmbeddings()

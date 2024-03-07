@@ -6,31 +6,42 @@ namespace MistralDotNetClient.Domain.ChatCompletions;
 
 public class ChatCompletionBuilder
 {
-    private readonly List<BaseChatMessage> _messages = [];
-    private Model _model = Model.Tiny;
+    public readonly List<BaseChatMessage> Messages = [];
+    public Model Model = Model.Tiny;
+    public int? MaxTokens;
 
+    public Either<InternalError, ChatCompletion> Build()
+    {
+        if(Messages.Count == 0)
+            return new ChatCompletionMustContainMessages();
+        if(Messages.Last().Type != ChatMessageType.User)
+            return new LastChatCompletionMessageShouldBeUserMessage();
+        if(Model == Model.Embed)
+            return new WrongChatCompletionModel(Model.Type);
+        return ChatCompletion.FromBuilder(this);
+    }
+    
     public ChatCompletionBuilder WithSystemMessage(string message)
     {
-        _messages.Add(new SystemChatMessage(message));
+        Messages.Add(new SystemChatMessage(message));
         return this;
     }
     
     public ChatCompletionBuilder WithUserMessage(string message)
     {
-        _messages.Add(new UserChatMessage(message));
+        Messages.Add(new UserChatMessage(message));
         return this;
     }
     
     public ChatCompletionBuilder WithModel(Model model)
     {
-        _model = model;
+        Model = model;
         return this;
     }
     
-    public Either<InternalError, ChatCompletion> Create()
+    public ChatCompletionBuilder WithMaxToken(int maxToken)
     {
-        if(_messages.Last().Type != ChatMessageType.User)
-            return new InternalError(ErrorReason.InvalidObjectCreation, $"Last message of type {nameof(ChatCompletion)} must be a system message");
-        return new ChatCompletion(_model, _messages);
+        MaxTokens = maxToken;
+        return this;
     }
 }

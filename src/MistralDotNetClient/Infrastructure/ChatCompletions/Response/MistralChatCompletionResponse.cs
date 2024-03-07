@@ -2,11 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.ChatCompletions.Response;
 
-public class ChatCompletionResponse : IResponse {
+public class MistralChatCompletionResponse : IMistralResponse {
     [JsonPropertyName("id")] public string Id { get; set; }
     [JsonPropertyName("object")] public string Object { get; set; }
     [JsonPropertyName("created")] public int Created { get; set; }
     [JsonPropertyName("model")] public string Model { get; set; }
-    [JsonPropertyName("choices")] public ChatCompletionResponseChoice[] Choices { get; set; }
-    [JsonPropertyName("usage")] public ChatCompletionResponseUsage Usage { get; set; }
+    [JsonPropertyName("choices")] public MistralChatCompletionResponseChoice[] Choices { get; set; }
+    [JsonPropertyName("usage")] public MistralChatCompletionResponseUsage Usage { get; set; }
 }
