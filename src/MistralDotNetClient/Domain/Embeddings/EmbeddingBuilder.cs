@@ -5,7 +5,7 @@ namespace MistralDotNetClient.Domain.Embeddings;
 
 public class EmbeddingBuilder
 {
-    private readonly List<string> _inputs = [];
+    private readonly List<string> _inputs = new();
     private readonly Model _model = Model.Tiny;
 
     public EmbeddingBuilder WithInputs(IEnumerable<string> inputs)

@@ -9,10 +9,14 @@ public static class LanguageExtEitherAssertionsExtensions
     public static LanguageExtEitherAssertions<TL, TR> Should<TL, TR>(this Either<TL, TR> instance) => new(instance);
 }
 
-public class LanguageExtEitherAssertions<TL, TR>(Either<TL, TR> subject)
-    : ReferenceTypeAssertions<Either<TL, TR>, LanguageExtEitherAssertions<TL, TR>>(subject)
+public class LanguageExtEitherAssertions<TL, TR> : ReferenceTypeAssertions<Either<TL, TR>, LanguageExtEitherAssertions<TL, TR>>
 {
     protected override string Identifier { get; }
+
+    public LanguageExtEitherAssertions(Either<TL, TR> subject) : base(subject)
+    {
+        
+    }
     
     public void BeRightWithLog(Action<TR> action, string because = "", params object[] becauseArgs)
     {

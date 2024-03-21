@@ -1,5 +1,3 @@
-using LanguageExt;
-using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure.ChatCompletions.Request;
@@ -21,14 +19,15 @@ public static class MistralConvertExtensions
             Messages = messages,
             TopP = 1,
             Stream = false,
-            MaxTokens = chatCompletion.MaxTokens
+            MaxTokens = chatCompletion.MaxTokens,
+            Temperature = chatCompletion.Temperature
         };
     }
     
     public static ChatCompletionResponse ToResponse(this MistralChatCompletionResponse mistralResponse)
     {
         var lastCompletion = mistralResponse.Choices.Last();
-        return new ChatCompletionResponse(lastCompletion.Message.Content, lastCompletion.FinishReason, mistralResponse.Usage.CompletionTokens);
+        return new ChatCompletionResponse(lastCompletion.Message.Content, FinishReason.From(lastCompletion.FinishReason), mistralResponse.Usage.CompletionTokens);
     }
     
     public static MistralEmbeddingRequest ToRequest(this Embedding embedding)

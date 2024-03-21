@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using LanguageExt;
-using LanguageExt.DataTypes.Serialisation;
 using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Domain.Embeddings;
