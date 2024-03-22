@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.Models;
 
-public class Model
+public class MistralModel
 {
     [JsonPropertyName("id")] public string Id { get; set; }
     [JsonPropertyName("object")] public string Object { get; set; }
@@ -10,5 +10,5 @@ public class Model
     [JsonPropertyName("owned_by")] public string OwnedBy { get; set; }
     [JsonPropertyName("root")] public object Root { get; set; }
     [JsonPropertyName("parent")] public object Parent { get; set; }
-    [JsonPropertyName("permission")] public ModelPermission[] Permissions { get; set; }
+    [JsonPropertyName("permission")] public MistralModelPermission[] Permissions { get; set; }
 }

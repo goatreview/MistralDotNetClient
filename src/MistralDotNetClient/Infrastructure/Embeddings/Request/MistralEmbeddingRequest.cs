@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.Embeddings.Request;
 
-public class EmbeddingRequest
+public class MistralEmbeddingRequest
 {
     [JsonPropertyName("model")] public string Model { get; set; }
     [JsonPropertyName("input")] public string[] Input { get; set; }

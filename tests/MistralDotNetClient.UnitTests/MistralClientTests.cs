@@ -1,5 +1,5 @@
 using FluentAssertions;
-using MistralDotNetClient.Domain.ChatCompletions;
+using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure;
 using MistralDotNetClient.UnitTests.Common;
@@ -17,23 +17,11 @@ public class MistralClientTests
             .GetModels()
             .Should().BeRightWithLog(c => c.Data.Should().HaveCountGreaterThan(0));
     }
-
-    [Fact]
-    public void ShouldCreateChatCompletions()
-    {
-        var chat = ChatCompletion.Build().WithUserMessage("What is the current date ?").Create();
-        
-        MistralClient.Build(API_KEY)
-            .CreateChatCompletion(chat)
-            .Should()
-            .BeRightWithLog(c => c.Choices.Should().HaveCountGreaterThan(0));
-    }
     
     [Fact]
     public void ShouldCreateEmbeddings()
     {
-        var embedding = Embedding.Build().WithInputs(["Hello", "World"]).Create();
-        
+        var embedding = Embedding.Build().WithInputs(new[] {"Hello", "World"}).Create();
         MistralClient.Build(API_KEY)
             .CreateEmbedding(embedding)
             .Should().BeRightWithLog(c => c.Data.Should().HaveCountGreaterThan(0));

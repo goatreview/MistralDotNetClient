@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.Embeddings.Response;
 
-public class EmbeddingResponseData
+public class MistralEmbeddingResponseData
 {
     [JsonPropertyName("object")] public string Object { get; set; }
     [JsonPropertyName("embedding")] public double[] Embedding { get; set; }

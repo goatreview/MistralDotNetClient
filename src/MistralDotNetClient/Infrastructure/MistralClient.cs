@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using LanguageExt;
 using MistralDotNetClient.Common;
+using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure.ChatCompletions;
@@ -33,13 +34,13 @@ public class MistralClient
         return new MistralClient(apiKey);
     }
 
-    public Either<InternalError, ModelResponse> GetModels()
+    public Either<InternalError, MistralModelResponse> GetModels()
     {
         return BuildModelHttpRequest()
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
             .Do(Console.WriteLine)
-            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<ModelResponse>(r) : ParseError<ModelResponse>(r));
+            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<MistralModelResponse>(r) : ParseError<MistralModelResponse>(r));
     }
     
     public Either<InternalError, ChatCompletionResponse> CreateChatCompletion(Either<InternalError, ChatCompletion> chatCompletion)
@@ -50,10 +51,12 @@ public class MistralClient
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
             .Do(Console.WriteLine)
-            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<ChatCompletionResponse>(r) : ParseError<ChatCompletionResponse>(r));
+            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<MistralChatCompletionResponse>(r) : ParseError<MistralChatCompletionResponse>(r))
+            .Map(c => c.ToResponse())
+            .Bind(VerifyFinishReason);
     }
     
-    public Either<InternalError, EmbeddingResponse> CreateEmbedding(Either<InternalError, Embedding> embedding)
+    public Either<InternalError, MistralEmbeddingResponse> CreateEmbedding(Either<InternalError, Embedding> embedding)
     {
         return embedding
             .Map(c => c.ToRequest())
@@ -61,10 +64,18 @@ public class MistralClient
             .Map(c => SendRequest(c).Result)
             .Map(ExtractResponseData)
             .Do(Console.WriteLine)
-            .Bind(r => r.IsSuccessStatusCode ? ParseResponse<EmbeddingResponse>(r) : ParseError<EmbeddingResponse>(r));
-
+            .Bind(r => r.IsSuccessStatusCode
+                ? ParseResponse<MistralEmbeddingResponse>(r)
+                : ParseError<MistralEmbeddingResponse>(r));
     }
     
+    private static Either<InternalError, ChatCompletionResponse> VerifyFinishReason(ChatCompletionResponse response)
+    {
+        if (response.IsSuccessfulResponse())
+            return response;
+        return new MaxTokenCompletionExceeded(response.TokenUsed);
+    }
+
     private async Task<HttpResponseMessage> SendRequest(HttpRequestMessage request)
     {
         return await _client.SendAsync(request);
@@ -76,7 +87,7 @@ public class MistralClient
         return requestMessage;
     }
     
-    private HttpRequestMessage HttpRequestConversion(ChatCompletionRequest chatRequest)
+    private HttpRequestMessage HttpRequestConversion(MistralChatCompletionRequest chatRequest)
     {
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseUri, "chat/completions"));
         var content = new StringContent(JsonSerializer.Serialize(chatRequest), Encoding.UTF8, "application/json");
@@ -84,7 +95,7 @@ public class MistralClient
         return requestMessage;
     }
     
-    private HttpRequestMessage HttpRequestConversion(EmbeddingRequest embeddingRequest)
+    private HttpRequestMessage HttpRequestConversion(MistralEmbeddingRequest embeddingRequest)
     {
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, new Uri(_baseUri, "embeddings"));
         var content = new StringContent(JsonSerializer.Serialize(embeddingRequest), Encoding.UTF8, "application/json");
@@ -92,7 +103,7 @@ public class MistralClient
         return requestMessage;
     }
     
-    private static Either<InternalError, T> ParseResponse<T>(ResponseData response) where T : IResponse
+    private static Either<InternalError, T> ParseResponse<T>(ResponseData response) where T : IMistralResponse
     {
         try
         {
@@ -107,18 +118,18 @@ public class MistralClient
         }
     }
     
-    private static Either<InternalError, T> ParseError<T>(ResponseData response) where T : IResponse
+    private static Either<InternalError, T> ParseError<T>(ResponseData response) where T : IMistralResponse
     {
         try
         {
-            var errorResponse = JsonSerializer.Deserialize<ApiResponseError>(response.Content);
+            var errorResponse = JsonSerializer.Deserialize<MistralApiResponseError>(response.Content);
             return errorResponse is null 
-                ? new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(ApiResponseError)}") 
+                ? new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(MistralApiResponseError)}") 
                 : new InternalError(ErrorReason.HttpError, $"Code: {errorResponse.Code}, Message: {errorResponse.Message}");
         } 
         catch (Exception)
         {
-            return new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(ApiResponseError)}");
+            return new InternalError(ErrorReason.InvalidParsing, $"Impossible to parse {response.Content} to {nameof(MistralApiResponseError)}");
         }
     }
 

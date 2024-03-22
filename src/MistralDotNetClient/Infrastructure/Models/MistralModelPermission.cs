@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace MistralDotNetClient.Infrastructure.Models;
 
-public class ModelPermission
+public class MistralModelPermission
 {
     [JsonPropertyName("id")] public string Id { get; set; }
     [JsonPropertyName("object")] public string Object { get; set; }

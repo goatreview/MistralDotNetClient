@@ -1,6 +1,6 @@
 namespace MistralDotNetClient.Infrastructure;
 
-public interface IResponse
+public interface IMistralResponse
 {
     
 }

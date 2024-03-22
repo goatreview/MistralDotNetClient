@@ -4,10 +4,25 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageIcon>Icon.jpg</PackageIcon>
+        <RepositoryUrl>https://github.com/goatreview/MistralDotNetClient</RepositoryUrl>
+        <LangVersion>latest</LangVersion>
+        <PackageId>GoatReview.MistralDotNetClient</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>Pierre Belin, Cyril Canovas</Authors>
+        <Description>A simple C# .NET wrapper library to use with Mistral's API.</Description>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="LanguageExt.Core" Version="4.4.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Icon.jpg">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
     </ItemGroup>
 
 </Project>
