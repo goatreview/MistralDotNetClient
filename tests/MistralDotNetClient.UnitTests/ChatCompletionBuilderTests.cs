@@ -74,5 +74,5 @@ public class ChatCompletionBuilderTests
             .Build()
             .Should()
             .BeLeftWithLog(c => c.Should().BeOfType<MaxTokenInvalid>());
-    }
+    }    
 }

@@ -10,7 +10,8 @@
         <LangVersion>latest</LangVersion>
         <PackageId>GoatReview.MistralDotNetClient</PackageId>
         <Version>0.0.1</Version>
-        <Authors>GoatReview.MistralDotNetClient</Authors>
+        <Authors>Pierre Belin, Cyril Canovas</Authors>
+        <Description>A simple C# .NET wrapper library to use with Mistral's API.</Description>
     </PropertyGroup>
 
     <ItemGroup>
