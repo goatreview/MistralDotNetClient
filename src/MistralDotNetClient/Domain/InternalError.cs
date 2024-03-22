@@ -1,7 +1,6 @@
-using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 
-namespace MistralDotNetClient.Common;
+namespace MistralDotNetClient.Domain;
 
 public record InternalError(ErrorReason Reason, string Message);
 

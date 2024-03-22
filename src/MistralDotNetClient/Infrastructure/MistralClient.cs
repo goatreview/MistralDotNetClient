@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using LanguageExt;
 using MistralDotNetClient.Common;
+using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure.ChatCompletions;

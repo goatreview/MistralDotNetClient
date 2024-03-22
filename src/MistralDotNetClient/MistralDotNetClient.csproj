@@ -8,6 +8,9 @@
         <PackageIcon>Icon.jpg</PackageIcon>
         <RepositoryUrl>https://github.com/goatreview/MistralDotNetClient</RepositoryUrl>
         <LangVersion>latest</LangVersion>
+        <PackageId>GoatReview.MistralDotNetClient</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>GoatReview.MistralDotNetClient</Authors>
     </PropertyGroup>
 
     <ItemGroup>

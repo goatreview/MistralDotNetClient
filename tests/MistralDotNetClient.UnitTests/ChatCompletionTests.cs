@@ -1,5 +1,6 @@
 using FluentAssertions;
 using MistralDotNetClient.Common;
+using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Infrastructure;
 using MistralDotNetClient.UnitTests.Common;
