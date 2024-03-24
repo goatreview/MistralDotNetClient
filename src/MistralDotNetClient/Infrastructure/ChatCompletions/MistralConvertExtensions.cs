@@ -17,10 +17,11 @@ public static class MistralConvertExtensions
         {
             Model = chatCompletion.Model.Name,
             Messages = messages,
-            TopP = 1,
-            Stream = false,
+            TopP = chatCompletion.TopP,
+            Stream = chatCompletion.IsStreamEnabled,
             MaxTokens = chatCompletion.MaxTokens,
-            Temperature = chatCompletion.Temperature
+            Temperature = chatCompletion.Temperature,
+            RandomSeed = chatCompletion.Seed,
         };
     }
     

@@ -1,5 +1,4 @@
 using FluentAssertions;
-using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.UnitTests.Common;
@@ -55,7 +54,7 @@ public class ChatCompletionBuilderTests
     [Theory]
     [InlineData(-0.01)]
     [InlineData(1.01)]
-    public void ShouldReturnError_WhenTopPis(float topP)
+    public void ShouldReturnError_WhenTopPIs(float topP)
     {
         ChatCompletion.Builder()
             .WithUserMessage("User message")
@@ -75,4 +74,48 @@ public class ChatCompletionBuilderTests
             .Should()
             .BeLeftWithLog(c => c.Should().BeOfType<MaxTokenInvalid>());
     }    
+    
+    [Fact]
+    public void ShouldSetSeed_WhenBuildWithSeed()
+    {
+        ChatCompletion.Builder()
+            .WithUserMessage("User message")
+            .WithSeed(1337)
+            .Build()
+            .Should()
+            .BeRightWithLog(c => c.Seed.Should().Be(1337));
+    }    
+    
+    [Fact]
+    public void ShouldSetTopP_WhenBuildWithTopP()
+    {
+        ChatCompletion.Builder()
+            .WithUserMessage("User message")
+            .WithTopP(0.5f)
+            .Build()
+            .Should()
+            .BeRightWithLog(c => c.TopP.Should().Be(0.5f));
+    }    
+    
+    [Fact]
+    public void ShouldSetTemperature_WhenBuildWithTemperature()
+    {
+        ChatCompletion.Builder()
+            .WithUserMessage("User message")
+            .WithTemperature(0.3f)
+            .Build()
+            .Should()
+            .BeRightWithLog(c => c.Temperature.Should().Be(0.3f));
+    } 
+    
+    [Fact]
+    public void ShouldSetStream_WhenBuildWithStream()
+    {
+        ChatCompletion.Builder()
+            .WithUserMessage("User message")
+            .WithStream(true)
+            .Build()
+            .Should()
+            .BeRightWithLog(c => c.IsStreamEnabled.Should().BeTrue());
+    } 
 }

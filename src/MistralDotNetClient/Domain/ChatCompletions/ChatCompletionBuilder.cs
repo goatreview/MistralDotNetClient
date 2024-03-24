@@ -1,5 +1,4 @@
 using LanguageExt;
-using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain.ChatCompletions.Messages;
 
 namespace MistralDotNetClient.Domain.ChatCompletions;
@@ -11,6 +10,8 @@ public class ChatCompletionBuilder
     public int? MaxTokens;
     public float Temperature = 0.7f;
     public float TopP = 1f;
+    public int? Seed;
+    public bool IsStreamEnabled = false;
 
     public Either<InternalError, ChatCompletion> Build()
     {
@@ -25,7 +26,7 @@ public class ChatCompletionBuilder
         if(Temperature is < 0 or > 1)
             return new TemperatureInvalid();
         if(TopP is < 0 or > 1)
-            return new TemperatureInvalid();
+            return new TopPInvalid();
         return ChatCompletion.FromBuilder(this);
     }
     
@@ -62,6 +63,18 @@ public class ChatCompletionBuilder
     public ChatCompletionBuilder WithTopP(float topP)
     {
         TopP = topP;
+        return this;
+    }
+
+    public ChatCompletionBuilder WithSeed(int seed)
+    {
+        Seed = seed;
+        return this;
+    }
+
+    public ChatCompletionBuilder WithStream(bool isStreamEnabled)
+    {
+        IsStreamEnabled = isStreamEnabled;
         return this;
     }
 }

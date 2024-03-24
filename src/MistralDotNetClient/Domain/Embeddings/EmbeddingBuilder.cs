@@ -1,5 +1,4 @@
 using LanguageExt;
-using MistralDotNetClient.Common;
 
 namespace MistralDotNetClient.Domain.Embeddings;
 

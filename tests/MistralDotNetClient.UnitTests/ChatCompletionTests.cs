@@ -1,5 +1,4 @@
 using FluentAssertions;
-using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain;
 using MistralDotNetClient.Domain.ChatCompletions;
 using MistralDotNetClient.Infrastructure;
@@ -9,7 +8,7 @@ namespace MistralDotNetClient.UnitTests;
 
 public class ChatCompletionTests
 {
-    private const string API_KEY = "";
+    private const string API_KEY = "M2BMuGjslxjcxa4sw30PAnKmpl9nTOJS";
     
     [Fact]
     public void ShouldCreateChatCompletions()

@@ -1,5 +1,4 @@
 using FluentAssertions;
-using MistralDotNetClient.Common;
 using MistralDotNetClient.Domain.Embeddings;
 using MistralDotNetClient.Infrastructure;
 using MistralDotNetClient.UnitTests.Common;
